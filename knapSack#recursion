@@ -1,0 +1,34 @@
+#include<bits/stdc++.h>
+#define FIO ios_base::sync_with_stdio(0);cin.tie(0);
+using namespace std;
+typedef long long ll;
+const int N=3000;
+int numOfItems, capacity;
+vector<pair<int,int>>weightAndValue;
+int knapSack(int lastItem, int remWeight){
+    if (remWeight < 0){
+        return -1e6;
+    }
+    if (lastItem == -1){
+        return 0;
+    }
+    int takeItem = knapSack(lastItem-1 ,
+                            remWeight - weightAndValue[lastItem].first ) + weightAndValue[lastItem].second;
+
+    int leaveItem = knapSack(lastItem-1 ,remWeight);
+
+    int maxProfit = max(takeItem,leaveItem);
+    return maxProfit;
+}
+
+int main(){
+    cin>>capacity>>numOfItems;
+    int x,y;
+    for (int i = 0; i < numOfItems; ++i) {
+        cin>>x>>y;
+        weightAndValue.push_back({x,y});
+    }
+    int ans = knapSack( numOfItems-1, capacity);
+    cout<<ans;
+    return 0;
+}
