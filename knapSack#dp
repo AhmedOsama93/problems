@@ -1,0 +1,43 @@
+#include<bits/stdc++.h>
+#define FIO ios_base::sync_with_stdio(0);cin.tie(0);
+using namespace std;
+typedef long long ll;
+const int N=2001;
+int numOfItems, capacity;
+vector<pair<int,int>>weightAndValue;
+int memorization[N][N];
+int knapSack(int posOfItem, int remWeight){
+    if (remWeight < 0){
+        return -1e6;
+    }
+    if (posOfItem == numOfItems-1){
+        return 0;
+    }
+    if (memorization[posOfItem][remWeight] != -1){
+        return memorization[posOfItem][remWeight];
+    }
+    int takeItem = knapSack(posOfItem + 1 ,
+                            remWeight - weightAndValue[posOfItem].first ) + weightAndValue[posOfItem].second;
+
+    int leaveItem = knapSack(posOfItem + 1 , remWeight);
+
+    int maxProfit = max(takeItem,leaveItem);
+    return memorization[posOfItem][remWeight]= maxProfit;
+}
+
+int main(){
+    cin>>capacity>>numOfItems;
+    int x,y;
+    for (int i = 0; i < numOfItems + 1; ++i) {
+        for (int j = 0; j < numOfItems + 1; ++j) {
+            memorization[i][j] = -1;
+        }
+    }
+    for (int i = 0; i < numOfItems; ++i) {
+        cin>>x>>y;
+        weightAndValue.push_back({x,y});
+    }
+    int ans = knapSack( 0, capacity);
+    cout<<ans;
+    return 0;
+}
